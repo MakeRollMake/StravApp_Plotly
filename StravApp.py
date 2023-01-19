@@ -9,7 +9,8 @@ app = Dash(__name__, external_stylesheets=external_stylesheets)
 
 
 # create the dataframe
-df = pd.read_csv('activities_clean.csv')
+df = pd.read_csv('Data/activities_clean.csv')
+df_map = pd.read_csv('Data/activities_clean_map.csv')
 
 # converts the 'start_date' column to datetime format
 df['start_date'] = pd.to_datetime(df['start_date'])
@@ -64,9 +65,9 @@ df_cal.sort_values(by='start_date', inplace=True)
 fig3 = calplot(df_cal, x="start_date", y="counts", years_title=True, colorscale="blues", gap=4)
 
 
-########### -This part is dedicated to the last activity analysis- ###########
+# ---------- LAST ACTIVITY ANALYSIS ---------- #
 # select the last activity
-act_coord = eval(df['map.polyline'][0])
+act_coord = eval(df_map['map.polyline'][0])
 # create 2 lists for latitude and longitude values of the activity
 act_latitude = []
 act_longitude = []
@@ -75,7 +76,7 @@ while i < len(act_coord):
     act_latitude.append(act_coord[i][0])
     act_longitude.append(act_coord[i][1])
     i += 1
-# creates df for latitude and longitude values
+# create df for latitude and longitude values
 df_act_coord = pd.DataFrame()
 df_act_coord['latitude'] = act_latitude
 df_act_coord['longitude'] = act_longitude
@@ -85,8 +86,6 @@ mid_point = round(len(df_act_coord)/2)
 fig4 = px.line_mapbox(df_act_coord, lat="latitude", lon="longitude")
 fig4.update_layout(
     mapbox_style="open-street-map", mapbox_zoom=12,
-    #mapbox_center_lat=df_act_coord['latitude'][mid_point],
-    #mapbox_center_lon=df_act_coord['longitude'][mid_point],
     margin={"r": 10, "t": 10, "l": 10, "b": 10},
     width=800, height=800
 )
