@@ -34,9 +34,6 @@ df = df.dropna(subset=['map.summary_polyline'])
 
 # add decoded summary polylines to create a list of latitude and longitude coordinates
 df['map.polyline'] = df['map.summary_polyline'].apply(polyline.decode)
-#print(df['map.polyline'])
-print(df['map.polyline'][0])
-print(type(df['map.polyline']))
 
 # Saves the dataframe to a new csv file
-#df.to_csv('activities_clean.csv')
+df.to_csv('activities_clean.csv')
