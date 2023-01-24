@@ -1,6 +1,7 @@
 from dash import Dash, dcc, html
 import dash_bootstrap_components as dbc
 import plotly.express as px
+import pandas as pd
 
 FA = "https://use.fontawesome.com/releases/v5.12.1/css/all.css"
 
@@ -13,11 +14,11 @@ def drawFigure():
             dbc.CardBody([
                 dcc.Graph(
                     figure=px.bar(
-                        df, x="sepal_width", y="sepal_length", color="species"
+                        df_demo, x="sepal_width", y="sepal_length", color="species"
                     ).update_layout(
                         template='plotly_dark',
-                        plot_bgcolor= 'rgba(0, 0, 0, 0)',
-                        paper_bgcolor= 'rgba(0, 0, 0, 0)',
+                        plot_bgcolor='rgba(0, 0, 0, 0)',
+                        paper_bgcolor='rgba(0, 0, 0, 0)',
                     ),
                     config={
                         'displayModeBar': False
@@ -41,8 +42,26 @@ def drawText(kpi, kpi_info):
     ])
 
 # Data
-df = px.data.iris()
+df_demo = px.data.iris()
 
+# create the dataframe
+df = pd.read_csv('Data/activities_clean.csv')
+df_map = pd.read_csv('Data/activities_clean_map.csv')
+# converts the 'start_date' column to datetime format
+df['start_date'] = pd.to_datetime(df['start_date'])
+
+# create fig2: Strava activities average speed (km/h)
+fig2 = px.scatter(df, x='start_date', y='average_speed', color='type', title='Activities average speed (km/h), a third dimension (distance) is shown through size of markers', size='distance',
+                  labels={
+                      "type": "Activity type",
+                      "start_date": "Start Date",
+                      "average_speed": "Average Speed (km/h)"
+                  },
+                  )
+fig2.update_xaxes(rangeslider_visible=True)
+fig2.update_layout(template='plotly_dark',
+                   plot_bgcolor='rgba(0, 0, 0, 0)',
+                   paper_bgcolor='rgba(0, 0, 0, 0)',)
 
 app.layout = html.Div([
     dbc.Container(
@@ -103,8 +122,7 @@ app.layout = html.Div([
                     drawFigure()
                 ], width=3),
                 dbc.Col([
-                    drawFigure()
-                ], width=6),
+                    dbc.Card(dbc.CardBody([dcc.Graph(id='graph2', figure=fig2)]))], width=6),
             ], align='center'),
 
             html.Br(),
