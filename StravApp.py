@@ -51,6 +51,7 @@ df_map = pd.read_csv('Data/activities_clean_map.csv')
 # converts the 'start_date' column to datetime format
 df['start_date'] = pd.to_datetime(df['start_date'])
 
+
 # ---------- OVERALL DATA ---------- #
 # KPIs 1: BIKE
 total_bike_distance = round(df[(df['type'] == 'Ride')]['distance'].sum()/1000)
@@ -66,7 +67,6 @@ total_swim_distance = round((df[(df['type'] == 'Swim')]['distance'].sum()/1000) 
 swim_count = len(df[df['type'] == 'Swim'])
 swim_time = round((df[(df['type'] == 'Swim')]['moving_time'].sum()/3600) + 2)
 
-
 # create fig1: Strava activities average speed (km/h)
 fig1 = px.scatter(
     df, x='start_date', y='average_speed', color='type',
@@ -80,7 +80,6 @@ fig1 = px.scatter(
 fig1.update_layout(template='plotly_dark',
                    plot_bgcolor='rgba(0, 0, 0, 0)',
                    paper_bgcolor='rgba(0, 0, 0, 0)',)
-
 # create fig3: calendar heatmap daily activities number
 # Create the df_cal dataframe with the start_date and counts column from df_demo values
 df_cal = df['start_date'].value_counts().rename_axis('start_date').reset_index(name='counts')
@@ -92,6 +91,19 @@ fig3.update_layout(template='plotly_dark',
                    plot_bgcolor='rgba(0, 0, 0, 0)',
                    paper_bgcolor='rgba(0, 0, 0, 0)',)
 
+
+# ---------- LAST ACTIVITY ---------- #
+# KPIS
+last_name = df['name'][0]
+last_start_date = df['start_date'][0].date()
+last_start_time = df['start_time'][0]
+last_type = df['type'][0]
+last_distance = df['distance'][0]
+last_average_speed = df['average_speed'][0]
+last_elev_high = df['elev_high'][0]
+
+
+# ---------- APP LAYOUT ---------- #
 app.layout = html.Div([
     dbc.Container(
         [
@@ -193,13 +205,14 @@ app.layout = html.Div([
             html.H4("Last activity", className="display-3"),
             dbc.Row([
                 dbc.Col([
-                    drawText(8986, 'Total bike distance (KM)')
+                    drawText(last_name, 'Name')
                 ], width=4),
                 dbc.Col([
-                    drawText(2567, 'Total run distance (KM)')
+                    drawText(last_start_date, 'Date (yyyy-mm-dd)'),
+                    drawText(last_start_time, 'Time (hh:mm:ss)'),
                 ], width=4),
                 dbc.Col([
-                    drawText(3, 'Total swim distance (KM)')
+                    drawText(last_type, 'Type')
                 ], width=4)
             ], align='center'),
 
@@ -207,13 +220,13 @@ app.layout = html.Div([
 
             dbc.Row([
                 dbc.Col([
-                    drawText(456, 'Bike activities counter')
+                    drawText(last_distance, 'Distance (m)')
                 ], width=4),
                 dbc.Col([
-                    drawText(318, 'Run activities counter')
+                    drawText(last_average_speed, 'Average speed')
                 ], width=4),
                 dbc.Col([
-                    drawText(1, 'Swim activities counter')
+                    drawText(last_elev_high, 'Positive elevation')
                 ], width=4)
             ], align='center'),
 
