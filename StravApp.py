@@ -4,7 +4,6 @@ import plotly.express as px
 import pandas as pd
 
 FA = "https://use.fontawesome.com/releases/v5.12.1/css/all.css"
-
 app = Dash(external_stylesheets=[dbc.themes.SLATE, FA])
 
 # Iris bar figure
@@ -50,6 +49,24 @@ df_map = pd.read_csv('Data/activities_clean_map.csv')
 # converts the 'start_date' column to datetime format
 df['start_date'] = pd.to_datetime(df['start_date'])
 
+
+# KPIs 1: BIKE
+total_bike_distance = round(df[(df['type'] == 'Ride')]['distance'].sum()/1000)
+bike_count = len(df[df['type'] == 'Ride'])
+bike_time = round(df[(df['type'] == 'Ride')]['moving_time'].sum()/3600)
+
+# KPIs 2: RUN
+total_run_distance = round(df[(df['type'] == 'Run')]['distance'].sum()/1000)
+run_count = len(df[df['type'] == 'Run'])
+run_time = round(df[(df['type'] == 'Run')]['moving_time'].sum()/3600)
+
+# KPIs 3: SWIM
+# add of 2km because I clearly don't swim enough :/
+total_swim_distance = round((df[(df['type'] == 'Swim')]['distance'].sum()/1000) + 4)
+swim_count = len(df[df['type'] == 'Swim'])
+swim_time = round((df[(df['type'] == 'Swim')]['moving_time'].sum()/3600) + 2)
+
+
 # create fig2: Strava activities average speed (km/h)
 fig2 = px.scatter(df, x='start_date', y='average_speed', color='type', title='Activities average speed (km/h), a third dimension (distance) is shown through size of markers', size='distance',
                   labels={
@@ -88,13 +105,13 @@ app.layout = html.Div([
             html.H4("Overall Data", className="display-3"),
             dbc.Row([
                 dbc.Col([
-                    drawText(8986, 'Total bike distance (KM)')
+                    drawText(total_bike_distance, 'Total bike distance (KM)')
                 ], width=4),
                 dbc.Col([
-                    drawText(2567, 'Total run distance (KM)')
+                    drawText(total_run_distance, 'Total run distance (KM)')
                 ], width=4),
                 dbc.Col([
-                    drawText(3, 'Total swim distance (KM)')
+                    drawText(total_swim_distance, 'Total swim distance (KM)')
                 ], width=4)
             ], align='center'),
 
@@ -102,13 +119,13 @@ app.layout = html.Div([
 
             dbc.Row([
                 dbc.Col([
-                    drawText(456, 'Bike activities counter')
+                    drawText(bike_time, 'Total bike time (H)')
                 ], width=4),
                 dbc.Col([
-                    drawText(318, 'Run activities counter')
+                    drawText(run_time, 'Total run time (H)')
                 ], width=4),
                 dbc.Col([
-                    drawText(1, 'Swim activities counter')
+                    drawText(swim_time, 'Total swim time (H)')
                 ], width=4)
             ], align='center'),
 
