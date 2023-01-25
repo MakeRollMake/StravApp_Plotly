@@ -3,3 +3,4 @@ pandas
 plotly_calplot
 dash_daq
 gunicorn
+dash_bootstrap_components
