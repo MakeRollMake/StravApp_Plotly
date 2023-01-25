@@ -2,6 +2,8 @@ from dash import Dash, dcc, html
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import pandas as pd
+from plotly_calplot import calplot
+
 
 FA = "https://use.fontawesome.com/releases/v5.12.1/css/all.css"
 app = Dash(external_stylesheets=[dbc.themes.SLATE, FA])
@@ -49,34 +51,44 @@ df_map = pd.read_csv('Data/activities_clean_map.csv')
 # converts the 'start_date' column to datetime format
 df['start_date'] = pd.to_datetime(df['start_date'])
 
-
+# ---------- OVERALL DATA ---------- #
 # KPIs 1: BIKE
 total_bike_distance = round(df[(df['type'] == 'Ride')]['distance'].sum()/1000)
 bike_count = len(df[df['type'] == 'Ride'])
 bike_time = round(df[(df['type'] == 'Ride')]['moving_time'].sum()/3600)
-
 # KPIs 2: RUN
 total_run_distance = round(df[(df['type'] == 'Run')]['distance'].sum()/1000)
 run_count = len(df[df['type'] == 'Run'])
 run_time = round(df[(df['type'] == 'Run')]['moving_time'].sum()/3600)
-
 # KPIs 3: SWIM
-# add of 2km because I clearly don't swim enough :/
+# add of 4km and 2H because I clearly don't swim enough :/
 total_swim_distance = round((df[(df['type'] == 'Swim')]['distance'].sum()/1000) + 4)
 swim_count = len(df[df['type'] == 'Swim'])
 swim_time = round((df[(df['type'] == 'Swim')]['moving_time'].sum()/3600) + 2)
 
 
-# create fig2: Strava activities average speed (km/h)
-fig2 = px.scatter(df, x='start_date', y='average_speed', color='type', title='Activities average speed (km/h), a third dimension (distance) is shown through size of markers', size='distance',
-                  labels={
-                      "type": "Activity type",
-                      "start_date": "Start Date",
-                      "average_speed": "Average Speed (km/h)"
-                  },
-                  )
-fig2.update_xaxes(rangeslider_visible=True)
-fig2.update_layout(template='plotly_dark',
+# create fig1: Strava activities average speed (km/h)
+fig1 = px.scatter(
+    df, x='start_date', y='average_speed', color='type',
+    title='Activities average speed (km/h), a third dimension (distance) is shown through size of markers',
+    size='distance',
+    labels={
+        "type": "Activity type",
+        "start_date": "Start Date",
+        "average_speed": "Average Speed (km/h)"
+    })
+fig1.update_layout(template='plotly_dark',
+                   plot_bgcolor='rgba(0, 0, 0, 0)',
+                   paper_bgcolor='rgba(0, 0, 0, 0)',)
+
+# create fig3: calendar heatmap daily activities number
+# Create the df_cal dataframe with the start_date and counts column from df_demo values
+df_cal = df['start_date'].value_counts().rename_axis('start_date').reset_index(name='counts')
+# Sort the dataframe by the 'start_date' column in ascending order and update the dataframe in place
+df_cal.sort_values(by='start_date', inplace=True)
+# calendar heatmap
+fig3 = calplot(df_cal, x="start_date", y="counts", years_title=True, colorscale="blues", gap=4)
+fig3.update_layout(template='plotly_dark',
                    plot_bgcolor='rgba(0, 0, 0, 0)',
                    paper_bgcolor='rgba(0, 0, 0, 0)',)
 
@@ -139,14 +151,35 @@ app.layout = html.Div([
                     drawFigure()
                 ], width=3),
                 dbc.Col([
-                    dbc.Card(dbc.CardBody([dcc.Graph(id='graph2', figure=fig2)]))], width=6),
+                    dbc.Card(
+                        dbc.CardBody(
+                            dcc.Graph(id='graph2', figure=fig1)
+                        )
+                    )
+                ], width=6),
             ], align='center'),
 
             html.Br(),
 
             dbc.Row([
                 dbc.Col([
-                    drawFigure()
+                    dbc.Card(
+                        dbc.CardBody(
+                            dcc.Graph(id='graph3', figure=fig3)
+                        )
+                    )
+                ], width=12),
+            ], align='center'),
+
+            html.Br(),
+
+            dbc.Row([
+                dbc.Col([
+                    dbc.Card(
+                        dbc.CardBody(
+                            dcc.Graph(id='graph2', figure=fig1)
+                        )
+                    )
                 ], width=9),
                 dbc.Col([
                     drawFigure()
