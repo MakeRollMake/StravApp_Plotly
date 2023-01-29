@@ -45,7 +45,7 @@ def drawText(kpi, kpi_info):
 # Data
 df_demo = px.data.iris()
 
-# create the dataframe
+# Create the dataframe
 df = pd.read_csv('Data/activities_clean.csv')
 df_map = pd.read_csv('Data/activities_clean_map.csv')
 # converts the 'start_date' column to datetime format
@@ -102,29 +102,8 @@ last_distance = df['distance'][0]
 last_average_speed = df['average_speed'][0]
 last_elev_high = df['elev_high'][0]
 
-
-# ---------- APP LAYOUT ---------- #
-app.layout = html.Div([
-    dbc.Container(
-        [
-            html.H1("STRAVA DATA VISUALIZATION", className="display-3"),
-            html.P(
-                "Use of Dash & Plotly to visualize Strava Activity Data.",
-                className="lead",
-            ),
-            html.Hr(className="my-2"),
-            html.P([
-                dbc.Button("Github Repository", href='https://github.com/MakeRollMake/StravApp_Plotly.git', className="me-1"),
-                dbc.Button("Getting Started with the Strava API", href='https://developers.strava.com/docs/getting-started/', className="me-1"),
-                dbc.Button("WIP Strava Jupyter Notebook", href='https://github.com/MakeRollMake/Dash_test_render/blob/main/WIP%20Strava%20Jupyter%20Notebook.ipynb', className="me-1")
-            ])
-        ],
-        fluid=True,
-        className="h-100 p-5 text-light bg-dark rounded-3"
-
-    ),
-
-    dbc.Card(
+# ---------- OVERALL DATA TAB---------- #
+overall_data_tab = dbc.Card(
         dbc.CardBody([
             html.H4("Overall Data", className="display-3"),
             dbc.Row([
@@ -198,9 +177,10 @@ app.layout = html.Div([
                 ], width=3),
             ], align='center'),
         ]), color='dark'
-    ),
+    )
 
-    dbc.Card(
+# ---------- LAST ACTIVITY TAB---------- #
+last_activity_tab = dbc.Card(
         dbc.CardBody([
             html.H4("Last activity", className="display-3"),
             dbc.Row([
@@ -255,6 +235,58 @@ app.layout = html.Div([
                 ], width=3),
             ], align='center'),
         ]), color='dark'
+    )
+
+monthly_data_tab = "TODO"
+
+weekly_data_tab = "TODO"
+
+progress_tab = dbc.Card(
+    dbc.CardBody(
+        [
+            html.P("You are the GOAT !!", className="card-text")
+        ]
+    ),
+    className="mt-3"
+)
+
+tabs = dbc.Tabs(
+    [
+        dbc.Tab(overall_data_tab, label="Overall Data"),
+        dbc.Tab(last_activity_tab, label="Last Activity"),
+        dbc.Tab(monthly_data_tab, label="Monthly Data", disabled=True),
+        dbc.Tab(weekly_data_tab, label="Weekly Data", disabled=True),
+        dbc.Tab(progress_tab, label="Progress")
+    ]
+)
+
+app.layout = html.Div([
+    dbc.Card(
+        dbc.CardBody([
+            dbc.Container(
+                [
+                    html.H1("STRAVA DATA VISUALIZATION", className="display-3"),
+                    html.P(
+                        "Use of Dash & Plotly to visualize Strava Activity Data.",
+                        className="lead",
+                    ),
+                    html.Hr(className="my-2"),
+                    html.P([
+                        dbc.Button("Github Repository", href='https://github.com/MakeRollMake/StravApp_Plotly.git',
+                                   className="me-1"),
+                        dbc.Button("Getting Started with the Strava API",
+                                   href='https://developers.strava.com/docs/getting-started/', className="me-1"),
+                        dbc.Button("WIP Strava Jupyter Notebook",
+                                   href='https://github.com/MakeRollMake/Dash_test_render/blob/main/WIP%20Strava%20Jupyter%20Notebook.ipynb',
+                                   className="me-1")
+                    ])
+                ],
+                fluid=True,
+                className="h-100 p-5 text-light bg-dark rounded-3"
+
+            ),
+            tabs
+        ])
     )
 ])
 
