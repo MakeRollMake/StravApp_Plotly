@@ -114,7 +114,7 @@ app.layout = html.Div([
             ),
             html.Hr(className="my-2"),
             html.P([
-                dbc.Button("Github Repository", href='https://github.com/MakeRollMake/Dash_test_render', className="me-1"),
+                dbc.Button("Github Repository", href='https://github.com/MakeRollMake/StravApp_Plotly.git', className="me-1"),
                 dbc.Button("Getting Started with the Strava API", href='https://developers.strava.com/docs/getting-started/', className="me-1"),
                 dbc.Button("WIP Strava Jupyter Notebook", href='https://github.com/MakeRollMake/Dash_test_render/blob/main/WIP%20Strava%20Jupyter%20Notebook.ipynb', className="me-1")
             ])
