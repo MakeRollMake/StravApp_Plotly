@@ -26,7 +26,7 @@ df['max_speed'] = df['max_speed'] * 3.6
 # Delete rows where 'average_speed' column is greater than 100 (geolocalisation bug during workout)
 df.drop(df[(df['average_speed'] > 100) & (df['type'] == 'Ride')].index, inplace=True)
 
-# creates a second df with only activities with GPX values
+# creates a second df_demo with only activities with GPX values
 # drop rows with Nan values in the map.summary_polyline
 df_map = df.dropna(subset=['map.summary_polyline'])
 
