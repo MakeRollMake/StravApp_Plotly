@@ -144,7 +144,7 @@ overall_data_tab = dbc.Card(
                 dbc.Col([
                     dbc.Card(
                         dbc.CardBody(
-                            dcc.Graph(id='graph2', figure=fig1)
+                            dcc.Graph(id='graph1', figure=fig1)
                         )
                     )
                 ], width=6),
