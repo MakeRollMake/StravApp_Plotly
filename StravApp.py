@@ -10,15 +10,15 @@ app = Dash(external_stylesheets=[dbc.themes.SLATE, FA])
 # ----------ColorPalettes--------- #
 # https://coolors.co/palette/001219-005f73-0a9396-94d2bd-e9d8a6-ee9b00-ca6702-bb3e03-ae2012-9b2226
 color1 = '#001219'
-color2 = '#005f73'
+color2 = color_ride = '#005f73'
 color3 = '#0a9396'
-color4 = '#94d2bd'
+color4 = color_kayaking = '#94d2bd'
 color5 = '#e9d8a6'
-color6 = '#ee9b00'
+color6 = color_run = '#ee9b00'
 color7 = '#ca6702'
-color8 = '#bb3e03'
+color8 = color_iceskate = '#bb3e03'
 color9 = '#ae2012'
-color10 = '#9b2226'
+color10 = color_swim = '#9b2226'
 
 
 # Iris bar figure
@@ -107,11 +107,11 @@ fig3.update_layout(template='plotly_dark',
 # create fig4: pie chart moving time by activities type
 fig4 = px.pie(df, values='moving_time', names='type', color='type',
               title='Activities Type Moving Time',
-              color_discrete_map={'Ride': color2,
-                                  'Run': color4,
-                                  'Kayaking': color6,
-                                  'IceSkate': color8,
-                                  'Swim': color10})
+              color_discrete_map={'Ride': color_ride,
+                                  'Run': color_run,
+                                  'Kayaking': color_kayaking,
+                                  'IceSkate': color_iceskate,
+                                  'Swim': color_swim})
 fig4.update_traces(textposition='inside', textinfo='percent+label')
 fig4.update_layout(template='plotly_dark',
                    plot_bgcolor='rgba(0, 0, 0, 0)',
@@ -120,11 +120,11 @@ fig4.update_layout(template='plotly_dark',
 # create fig5: pie chart distance by activities type
 fig5 = px.pie(df, values='distance', names='type', color='type',
               title='Activities Type Distance',
-              color_discrete_map={'Ride': color2,
-                                  'Run': color4,
-                                  'Kayaking': color6,
-                                  'IceSkate': color8,
-                                  'Swim': color10})
+              color_discrete_map={'Ride': color_ride,
+                                  'Run': color_run,
+                                  'Kayaking': color_kayaking,
+                                  'IceSkate': color_iceskate,
+                                  'Swim': color_swim})
 fig5.update_traces(textposition='inside', textinfo='percent+label')
 fig5.update_layout(template='plotly_dark',
                    plot_bgcolor='rgba(0, 0, 0, 0)',
@@ -142,8 +142,8 @@ fig6 = px.line(df, x='start_date',
                        "start_date": "Start Date",
                        "value": "Moving time"
                        },
-               color_discrete_map={"moving_time_cumsum_bike": color2,
-                                   "moving_time_cumsum_run": color4
+               color_discrete_map={"moving_time_cumsum_bike": color_ride,
+                                   "moving_time_cumsum_run": color_run
                                    }
                )
 fig6.update_traces(connectgaps=True)
