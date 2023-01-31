@@ -117,7 +117,7 @@ fig4.update_layout(template='plotly_dark',
                    plot_bgcolor='rgba(0, 0, 0, 0)',
                    paper_bgcolor='rgba(0, 0, 0, 0)', )
 
-# create fig4: pie chart moving time by activities type
+# create fig5: pie chart distance by activities type
 fig5 = px.pie(df, values='distance', names='type', color='type',
               title='Activities Type Distance',
               color_discrete_map={'Ride': color2,
@@ -129,7 +129,27 @@ fig5.update_traces(textposition='inside', textinfo='percent+label')
 fig5.update_layout(template='plotly_dark',
                    plot_bgcolor='rgba(0, 0, 0, 0)',
                    paper_bgcolor='rgba(0, 0, 0, 0)', )
-
+# create fig6: moving time cumulative sum
+df['moving_time_cumsum_bike'] = df[df['type'] == 'Ride'].loc[::-1, 'moving_time'].cumsum()[::-1]/1000
+df['moving_time_cumsum_run'] = df[df['type'] == 'Run'].loc[::-1, 'moving_time'].cumsum()[::-1]/1000
+# df['moving_time_cumsum_kayaking'] = df[df['type'] == 'Kayaking'].loc[::-1, 'moving_time'].cumsum()[::-1]/1000
+# df['moving_time_cumsum_IceSkate'] = df[df['type'] == 'IceSkate'].loc[::-1, 'moving_time'].cumsum()[::-1]/1000
+# df['moving_time_cumsum_Swim'] = df[df['type'] == 'Swim'].loc[::-1, 'moving_time'].cumsum()[::-1]/1000
+fig6 = px.line(df, x='start_date',
+               y=['moving_time_cumsum_bike', 'moving_time_cumsum_run'],
+               title='Moving Time Cumulative Sum',
+               labels={"variable": "Activity type",
+                       "start_date": "Start Date",
+                       "value": "Moving time"
+                       },
+               color_discrete_map={"moving_time_cumsum_bike": color2,
+                                   "moving_time_cumsum_run": color4
+                                   }
+               )
+fig6.update_traces(connectgaps=True)
+fig6.update_layout(template='plotly_dark',
+                   plot_bgcolor='rgba(0, 0, 0, 0)',
+                   paper_bgcolor='rgba(0, 0, 0, 0)', )
 
 # ---------- LAST ACTIVITY ---------- #
 # KPIS
@@ -191,7 +211,7 @@ overall_data_tab = dbc.Card(
             dbc.Col([
                 dbc.Card(
                     dbc.CardBody(
-                        dcc.Graph(id='graph1', figure=fig1)
+                        dcc.Graph(id='graph6', figure=fig6)
                     )
                 )
             ], width=6),
@@ -215,7 +235,7 @@ overall_data_tab = dbc.Card(
             dbc.Col([
                 dbc.Card(
                     dbc.CardBody(
-                        dcc.Graph(id='graph2', figure=fig1)
+                        dcc.Graph(id='graph1', figure=fig1)
                     )
                 )
             ], width=9),
