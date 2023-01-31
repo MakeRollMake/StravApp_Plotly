@@ -8,6 +8,19 @@ from plotly_calplot import calplot
 FA = "https://use.fontawesome.com/releases/v5.12.1/css/all.css"
 app = Dash(external_stylesheets=[dbc.themes.SLATE, FA])
 
+# ----------ColorPalettes--------- #
+#https://coolors.co/palette/001219-005f73-0a9396-94d2bd-e9d8a6-ee9b00-ca6702-bb3e03-ae2012-9b2226
+color1 = '#001219'
+color2 = '#005f73'
+color3 = '#0a9396'
+color4 = '#94d2bd'
+color5 = '#e9d8a6'
+color6 = '#ee9b00'
+color7 = '#ca6702'
+color8 = '#bb3e03'
+color9 = '#ae2012'
+color10 = '#9b2226'
+
 # Iris bar figure
 def drawFigure():
     return html.Div([
