@@ -117,6 +117,20 @@ fig4.update_layout(template='plotly_dark',
                    plot_bgcolor='rgba(0, 0, 0, 0)',
                    paper_bgcolor='rgba(0, 0, 0, 0)', )
 
+# create fig4: pie chart moving time by activities type
+fig5 = px.pie(df, values='distance', names='type', color='type',
+              title='Activities Type Distance',
+              color_discrete_map={'Ride': color2,
+                                  'Run': color4,
+                                  'Kayaking': color6,
+                                  'IceSkate': color8,
+                                  'Swim': color10})
+fig5.update_traces(textposition='inside', textinfo='percent+label')
+fig5.update_layout(template='plotly_dark',
+                   plot_bgcolor='rgba(0, 0, 0, 0)',
+                   paper_bgcolor='rgba(0, 0, 0, 0)', )
+
+
 # ---------- LAST ACTIVITY ---------- #
 # KPIS
 last_name = df['name'][0]
@@ -168,7 +182,11 @@ overall_data_tab = dbc.Card(
                 )
             ], width=3),
             dbc.Col([
-                drawFigure()
+                dbc.Card(
+                    dbc.CardBody(
+                        dcc.Graph(id='graph5', figure=fig5)
+                    )
+                )
             ], width=3),
             dbc.Col([
                 dbc.Card(
