@@ -90,7 +90,13 @@ fig1 = px.scatter(
         "type": "Activity type",
         "start_date": "Start Date",
         "average_speed": "Average Speed (km/h)"
-    })
+    },
+    color_discrete_map={'Ride': color_ride,
+                        'Run': color_run,
+                        'Kayaking': color_kayaking,
+                        'IceSkate': color_iceskate,
+                        'Swim': color_swim}
+    )
 fig1.update_layout(template='plotly_dark',
                    plot_bgcolor='rgba(0, 0, 0, 0)',
                    paper_bgcolor='rgba(0, 0, 0, 0)', )
@@ -238,10 +244,7 @@ overall_data_tab = dbc.Card(
                         dcc.Graph(id='graph1', figure=fig1)
                     )
                 )
-            ], width=9),
-            dbc.Col([
-                drawFigure()
-            ], width=3),
+            ], width=12)
         ], align='center'),
     ]), color='dark'
 )
