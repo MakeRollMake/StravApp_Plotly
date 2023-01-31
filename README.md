@@ -1,7 +1,9 @@
 # Strava Activities Dashboard
 
 ## Introduction
-`StravApp` is a dashboard for monitoring all your strava activies. 
+`StravApp` is a dashboard for monitoring all your strava activies.
+
+* [The StravApp Dashboard](http://dataviz.devops-nord.com/)
 
 ## Screenshots
 ![1](https://user-images.githubusercontent.com/50707253/215899510-05f2dd4b-4c9f-4e68-a761-ff5de66b81ca.png)
