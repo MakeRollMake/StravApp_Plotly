@@ -4,12 +4,11 @@ import plotly.express as px
 import pandas as pd
 from plotly_calplot import calplot
 
-
 FA = "https://use.fontawesome.com/releases/v5.12.1/css/all.css"
 app = Dash(external_stylesheets=[dbc.themes.SLATE, FA])
 
 # ----------ColorPalettes--------- #
-#https://coolors.co/palette/001219-005f73-0a9396-94d2bd-e9d8a6-ee9b00-ca6702-bb3e03-ae2012-9b2226
+# https://coolors.co/palette/001219-005f73-0a9396-94d2bd-e9d8a6-ee9b00-ca6702-bb3e03-ae2012-9b2226
 color1 = '#001219'
 color2 = '#005f73'
 color3 = '#0a9396'
@@ -20,6 +19,7 @@ color7 = '#ca6702'
 color8 = '#bb3e03'
 color9 = '#ae2012'
 color10 = '#9b2226'
+
 
 # Iris bar figure
 def drawFigure():
@@ -42,6 +42,7 @@ def drawFigure():
         ),
     ])
 
+
 # Text field
 def drawText(kpi, kpi_info):
     return html.Div([
@@ -55,6 +56,7 @@ def drawText(kpi, kpi_info):
         ),
     ])
 
+
 # Data
 df_demo = px.data.iris()
 
@@ -64,21 +66,20 @@ df_map = pd.read_csv('Data/activities_clean_map.csv')
 # converts the 'start_date' column to datetime format
 df['start_date'] = pd.to_datetime(df['start_date'])
 
-
 # ---------- OVERALL DATA ---------- #
 # KPIs 1: BIKE
-total_bike_distance = round(df[(df['type'] == 'Ride')]['distance'].sum()/1000)
+total_bike_distance = round(df[(df['type'] == 'Ride')]['distance'].sum() / 1000)
 bike_count = len(df[df['type'] == 'Ride'])
-bike_time = round(df[(df['type'] == 'Ride')]['moving_time'].sum()/3600)
+bike_time = round(df[(df['type'] == 'Ride')]['moving_time'].sum() / 3600)
 # KPIs 2: RUN
-total_run_distance = round(df[(df['type'] == 'Run')]['distance'].sum()/1000)
+total_run_distance = round(df[(df['type'] == 'Run')]['distance'].sum() / 1000)
 run_count = len(df[df['type'] == 'Run'])
-run_time = round(df[(df['type'] == 'Run')]['moving_time'].sum()/3600)
+run_time = round(df[(df['type'] == 'Run')]['moving_time'].sum() / 3600)
 # KPIs 3: SWIM
 # add of 4km and 2H because I clearly don't swim enough :/
-total_swim_distance = round((df[(df['type'] == 'Swim')]['distance'].sum()/1000) + 4)
+total_swim_distance = round((df[(df['type'] == 'Swim')]['distance'].sum() / 1000) + 4)
 swim_count = len(df[df['type'] == 'Swim'])
-swim_time = round((df[(df['type'] == 'Swim')]['moving_time'].sum()/3600) + 2)
+swim_time = round((df[(df['type'] == 'Swim')]['moving_time'].sum() / 3600) + 2)
 
 # create fig1: Strava activities average speed (km/h)
 fig1 = px.scatter(
@@ -92,7 +93,7 @@ fig1 = px.scatter(
     })
 fig1.update_layout(template='plotly_dark',
                    plot_bgcolor='rgba(0, 0, 0, 0)',
-                   paper_bgcolor='rgba(0, 0, 0, 0)',)
+                   paper_bgcolor='rgba(0, 0, 0, 0)', )
 # create fig3: calendar heatmap daily activities number
 # Create the df_cal dataframe with the start_date and counts column from df_demo values
 df_cal = df['start_date'].value_counts().rename_axis('start_date').reset_index(name='counts')
@@ -102,8 +103,19 @@ df_cal.sort_values(by='start_date', inplace=True)
 fig3 = calplot(df_cal, x="start_date", y="counts", years_title=True, colorscale="blues", gap=4)
 fig3.update_layout(template='plotly_dark',
                    plot_bgcolor='rgba(0, 0, 0, 0)',
-                   paper_bgcolor='rgba(0, 0, 0, 0)',)
-
+                   paper_bgcolor='rgba(0, 0, 0, 0)', )
+# create fig4: pie chart moving time by activities type
+fig4 = px.pie(df, values='moving_time', names='type', color='type',
+              title='Activities Type Moving Time',
+              color_discrete_map={'Ride': color2,
+                                  'Run': color4,
+                                  'Kayaking': color6,
+                                  'IceSkate': color8,
+                                  'Swim': color10})
+fig4.update_traces(textposition='inside', textinfo='percent+label')
+fig4.update_layout(template='plotly_dark',
+                   plot_bgcolor='rgba(0, 0, 0, 0)',
+                   paper_bgcolor='rgba(0, 0, 0, 0)', )
 
 # ---------- LAST ACTIVITY ---------- #
 # KPIS
@@ -117,138 +129,142 @@ last_elev_high = df['elev_high'][0]
 
 # ---------- OVERALL DATA TAB---------- #
 overall_data_tab = dbc.Card(
-        dbc.CardBody([
-            html.H4("Overall Data", className="display-3"),
-            dbc.Row([
-                dbc.Col([
-                    drawText(total_bike_distance, 'Total bike distance (KM)')
-                ], width=4),
-                dbc.Col([
-                    drawText(total_run_distance, 'Total run distance (KM)')
-                ], width=4),
-                dbc.Col([
-                    drawText(total_swim_distance, 'Total swim distance (KM)')
-                ], width=4)
-            ], align='center'),
+    dbc.CardBody([
+        html.H4("Overall Data", className="display-3"),
+        dbc.Row([
+            dbc.Col([
+                drawText(total_bike_distance, 'Total bike distance (KM)')
+            ], width=4),
+            dbc.Col([
+                drawText(total_run_distance, 'Total run distance (KM)')
+            ], width=4),
+            dbc.Col([
+                drawText(total_swim_distance, 'Total swim distance (KM)')
+            ], width=4)
+        ], align='center'),
 
-            html.Br(),
+        html.Br(),
 
-            dbc.Row([
-                dbc.Col([
-                    drawText(bike_time, 'Total bike time (H)')
-                ], width=4),
-                dbc.Col([
-                    drawText(run_time, 'Total run time (H)')
-                ], width=4),
-                dbc.Col([
-                    drawText(swim_time, 'Total swim time (H)')
-                ], width=4)
-            ], align='center'),
+        dbc.Row([
+            dbc.Col([
+                drawText(bike_time, 'Total bike time (H)')
+            ], width=4),
+            dbc.Col([
+                drawText(run_time, 'Total run time (H)')
+            ], width=4),
+            dbc.Col([
+                drawText(swim_time, 'Total swim time (H)')
+            ], width=4)
+        ], align='center'),
 
-            html.Br(),
+        html.Br(),
 
-            dbc.Row([
-                dbc.Col([
-                    drawFigure()
-                ], width=3),
-                dbc.Col([
-                    drawFigure()
-                ], width=3),
-                dbc.Col([
-                    dbc.Card(
-                        dbc.CardBody(
-                            dcc.Graph(id='graph1', figure=fig1)
-                        )
+        dbc.Row([
+            dbc.Col([
+                dbc.Card(
+                    dbc.CardBody(
+                        dcc.Graph(id='graph4', figure=fig4)
                     )
-                ], width=6),
-            ], align='center'),
-
-            html.Br(),
-
-            dbc.Row([
-                dbc.Col([
-                    dbc.Card(
-                        dbc.CardBody(
-                            dcc.Graph(id='graph3', figure=fig3)
-                        )
+                )
+            ], width=3),
+            dbc.Col([
+                drawFigure()
+            ], width=3),
+            dbc.Col([
+                dbc.Card(
+                    dbc.CardBody(
+                        dcc.Graph(id='graph1', figure=fig1)
                     )
-                ], width=12),
-            ], align='center'),
+                )
+            ], width=6),
+        ], align='center'),
 
-            html.Br(),
+        html.Br(),
 
-            dbc.Row([
-                dbc.Col([
-                    dbc.Card(
-                        dbc.CardBody(
-                            dcc.Graph(id='graph2', figure=fig1)
-                        )
+        dbc.Row([
+            dbc.Col([
+                dbc.Card(
+                    dbc.CardBody(
+                        dcc.Graph(id='graph3', figure=fig3)
                     )
-                ], width=9),
-                dbc.Col([
-                    drawFigure()
-                ], width=3),
-            ], align='center'),
-        ]), color='dark'
-    )
+                )
+            ], width=12),
+        ], align='center'),
+
+        html.Br(),
+
+        dbc.Row([
+            dbc.Col([
+                dbc.Card(
+                    dbc.CardBody(
+                        dcc.Graph(id='graph2', figure=fig1)
+                    )
+                )
+            ], width=9),
+            dbc.Col([
+                drawFigure()
+            ], width=3),
+        ], align='center'),
+    ]), color='dark'
+)
 
 # ---------- LAST ACTIVITY TAB---------- #
 last_activity_tab = dbc.Card(
-        dbc.CardBody([
-            html.H4("Last activity", className="display-3"),
-            dbc.Row([
-                dbc.Col([
-                    drawText(last_name, 'Name')
-                ], width=4),
-                dbc.Col([
-                    drawText(last_start_date, 'Date (yyyy-mm-dd)'),
-                    drawText(last_start_time, 'Time (hh:mm:ss)'),
-                ], width=4),
-                dbc.Col([
-                    drawText(last_type, 'Type')
-                ], width=4)
-            ], align='center'),
+    dbc.CardBody([
+        html.H4("Last activity", className="display-3"),
+        dbc.Row([
+            dbc.Col([
+                drawText(last_name, 'Name')
+            ], width=4),
+            dbc.Col([
+                drawText(last_start_date, 'Date (yyyy-mm-dd)'),
+                drawText(last_start_time, 'Time (hh:mm:ss)'),
+            ], width=4),
+            dbc.Col([
+                drawText(last_type, 'Type')
+            ], width=4)
+        ], align='center'),
 
-            html.Br(),
+        html.Br(),
 
-            dbc.Row([
-                dbc.Col([
-                    drawText(last_distance, 'Distance (m)')
-                ], width=4),
-                dbc.Col([
-                    drawText(last_average_speed, 'Average speed')
-                ], width=4),
-                dbc.Col([
-                    drawText(last_elev_high, 'Positive elevation')
-                ], width=4)
-            ], align='center'),
+        dbc.Row([
+            dbc.Col([
+                drawText(last_distance, 'Distance (m)')
+            ], width=4),
+            dbc.Col([
+                drawText(last_average_speed, 'Average speed')
+            ], width=4),
+            dbc.Col([
+                drawText(last_elev_high, 'Positive elevation')
+            ], width=4)
+        ], align='center'),
 
-            html.Br(),
+        html.Br(),
 
-            dbc.Row([
-                dbc.Col([
-                    drawFigure()
-                ], width=3),
-                dbc.Col([
-                    drawFigure()
-                ], width=3),
-                dbc.Col([
-                    drawFigure()
-                ], width=6),
-            ], align='center'),
+        dbc.Row([
+            dbc.Col([
+                drawFigure()
+            ], width=3),
+            dbc.Col([
+                drawFigure()
+            ], width=3),
+            dbc.Col([
+                drawFigure()
+            ], width=6),
+        ], align='center'),
 
-            html.Br(),
+        html.Br(),
 
-            dbc.Row([
-                dbc.Col([
-                    drawFigure()
-                ], width=9),
-                dbc.Col([
-                    drawFigure()
-                ], width=3),
-            ], align='center'),
-        ]), color='dark'
-    )
+        dbc.Row([
+            dbc.Col([
+                drawFigure()
+            ], width=9),
+            dbc.Col([
+                drawFigure()
+            ], width=3),
+        ], align='center'),
+    ]), color='dark'
+)
 
 monthly_data_tab = "TODO"
 
@@ -306,4 +322,4 @@ app.layout = html.Div([
 # Run app
 if __name__ == '__main__':
     app.run_server(debug=True)
-    #app.run_server(host='0.0.0.0', debug=True)
+    # app.run_server(host='0.0.0.0', debug=True)
