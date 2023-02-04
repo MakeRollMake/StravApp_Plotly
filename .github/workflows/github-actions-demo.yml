@@ -1,11 +1,7 @@
 name: Docker Image CI
 run-name: ${{ github.actor }} as updated dataviz docker image 🚀
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push]
 
 jobs:
 
@@ -14,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} on ${{ github.ref }} branch"
     - name: Check out repository code
       uses: actions/checkout@v2
     - name: Build the Docker image
