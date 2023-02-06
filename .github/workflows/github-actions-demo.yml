@@ -1,0 +1,23 @@
+name: Docker Image CI
+run-name: ${{ github.actor }} as updated dataviz docker image 🚀
+
+on: 
+  workflow_dispatch:
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} on ${{ github.ref }} branch"
+    - name: Check out repository code
+      uses: actions/checkout@v3
+    - name: Publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@v5
+      with:
+        name: makerollmake/dataviz_strava
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        tags: "latest"
