@@ -1,7 +1,10 @@
 name: Docker Image CI
 run-name: ${{ github.actor }} as updated dataviz docker image 🚀
 
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+  push:
+    branches: [ cicd ]
 
 jobs:
 
