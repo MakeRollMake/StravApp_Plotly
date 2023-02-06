@@ -3,8 +3,6 @@ run-name: ${{ github.actor }} as updated dataviz docker image 🚀
 
 on: 
   workflow_dispatch:
-  push:
-    branches: [ cicd ]
 
 jobs:
 
