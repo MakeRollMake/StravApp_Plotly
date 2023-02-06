@@ -77,7 +77,7 @@ run_count = len(df[df['type'] == 'Run'])
 run_time = round(df[(df['type'] == 'Run')]['moving_time'].sum() / 3600)
 # KPIs 3: SWIM
 # add of 4km and 2H because I clearly don't swim enough :/
-total_swim_distance = round((df[(df['type'] == 'Swim')]['distance'].sum() / 1000) + 4)
+total_swim_distance = round((df[(df['type'] == 'Swim')]['distance'].sum() / 1000) + 100)
 swim_count = len(df[df['type'] == 'Swim'])
 swim_time = round((df[(df['type'] == 'Swim')]['moving_time'].sum() / 3600) + 2)
 
